@@ -30,8 +30,9 @@ function depthFirstSearch(graph, startNode, targetNode) {
                 pathStack.push(currentNode);
 
                 pathStack.push(buffer);
+                pathStack = pathStack.flat(Infinity);
 
-                if (pathStack.at(pathStack.length-1) == targetNode) { break; }
+                if (pathStack[pathStack.length-1] == targetNode.getNode()) { break; }
             }
         }
     }
@@ -65,15 +66,47 @@ class node {
 
 
 // TODO: Testing...
+test0Graph = [];
+test0StartNode = test0Graph[1];
+test0TargetNode = test0Graph[5];
 
-test0Graph = [
+
+test1Graph = [
     new node(0, [1,1,0,1]),
     new node(1, [1,1,0,0]),
     new node(2, [0,0,0,0]),
     new node(3, [0,0,1,0])
 ];
+test1StartNode = test1Graph[0];
+test1TargetNode = test1Graph[2];
 
-test0StartNode = test0Graph[0];
-test0TargetNode = test0Graph[2];
 
-console.log(depthFirstSearch(test0Graph, test0StartNode, test0TargetNode));
+test2Graph = [
+    new node(0, [1,1,0,1,1,0]),
+    new node(1, [1,1,0,0,0,1]),
+    new node(2, [0,0,0,0,0,0]),
+    new node(3, [0,0,1,0,1,1]),
+    new node(4, [1,1,1,1,1,1]),
+    new node(5, [1,0,0,1,1,0]),
+];
+test2StartNode = test2Graph[4];
+test2TargetNode = test2Graph[2];
+
+
+test3Graph = [
+    new node(0, [1,1,0,1,1,0]),
+    new node(1, [1,1,0,0,0,1]),
+    new node(2, [0,0,0,0,0,0]),
+    new node(3, [0,0,1,0,1,1]),
+    new node(4, [1,1,1,1,1,1]),
+    new node(5, [1,0,0,1,1,0]),
+];
+test3StartNode = test3Graph[2];
+test3TargetNode = test3Graph[5];
+
+
+
+console.log("test0: [" + depthFirstSearch(test0Graph, test0StartNode, test0TargetNode) + "]");
+console.log("test1: [" + depthFirstSearch(test1Graph, test1StartNode, test1TargetNode) + "]");
+console.log("test2: [" + depthFirstSearch(test2Graph, test2StartNode, test2TargetNode) + "]");
+console.log("test3: [" + depthFirstSearch(test3Graph, test3StartNode, test3TargetNode) + "]");
