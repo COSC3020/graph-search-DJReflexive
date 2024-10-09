@@ -21,7 +21,6 @@ function depthFirstSearch(graph, startNode, targetNode) {
     
     // Recursive call
     let edges = startNode.getEdges();
-
     for (let i = 0; i < edges.length; i++) {
         if (edges[i] == 1) {
             let buffer = depthFirstSearch(graph, graph[i], targetNode);

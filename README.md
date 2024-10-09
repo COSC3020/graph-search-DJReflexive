@@ -33,6 +33,9 @@ Implement and analyze breadth-first search.
 
 # My Runtime Analysis
 
+When the depthFirstSearch() algorithm is first called, we see the base cases where if the starting node does not exist or has already been visited, it will return an empty array. There is an additional base case where if the starting node is the target node, it will terminate an return the node and terminate. All these base cases run in a constant time.
+
+Since I am using an adjacency matrix for this algorithm, and that we are interested in the worst case scenerio, the worst case runtime for this algorithm is $\Theta(n^2)$ since we have to iterate through every edge within the matrix (every node is checked).
 
 
 # Sources
