@@ -1,7 +1,7 @@
 
 // Graph is an adjacency matrix
 function depthFirstSearch(graph, startNode, targetNode) {
-
+    
     // If there is no node, or the node has been visitied, skip
     if (startNode == null || startNode.hasBeenVisited()) { return []; }
 

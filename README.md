@@ -41,6 +41,8 @@ Since I am using an adjacency matrix for this algorithm, and that we are interes
 # Sources
 
 - https://www.geeksforgeeks.org/javascript-array-flat-method/: For documentation on what the .flat() function does for arrays.
+- ChatGPT: For the help with the testing and getting property based testing to work. I had no idea how to start with jsverify, so it helped me a lot with creating the property test.
+- TA Ali: For the help in getting my node class to work with my test file.
 
 # Plagiarism Ackowledgement
 
