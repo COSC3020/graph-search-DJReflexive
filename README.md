@@ -35,13 +35,13 @@ Implement and analyze breadth-first search.
 
 When the depthFirstSearch() algorithm is first called, we see the base cases where if the starting node does not exist or has already been visited, it will return an empty array. There is an additional base case where if the starting node is the target node, it will terminate an return the node and terminate. All these base cases run in a constant time.
 
-Since I am using an adjacency matrix for this algorithm, and that we are interested in the worst case scenerio, the worst case runtime for this algorithm is $\Theta(n^2)$ since we have to iterate through every edge within the matrix (every node is checked).
+Since I am using an adjacency matrix for this algorithm, and that we are interested in the worst case scenerio, the worst case runtime for this algorithm is $\Theta(|V|^2)$ since we have to iterate through every vertex within the matrix (every node is checked).
 
 
 # Sources
 
 - https://www.geeksforgeeks.org/javascript-array-flat-method/: For documentation on what the .flat() function does for arrays.
-- ChatGPT: For the help with the testing and getting property based testing to work. I had no idea how to start with jsverify, so it helped me a lot with creating the property test.
+- ChatGPT: For the help with getting started with testing. Note: I had to rewrite all the ChatGPT code because I couldn't understand it and I wanted to remove jsverify (though I still use jsverify.random to generate numbers).
 - TA Ali: For the help in getting my node class to work with my test file.
 
 # Plagiarism Ackowledgement

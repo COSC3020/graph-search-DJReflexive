@@ -1,3 +1,9 @@
+const fs = require('fs');
+const jsc = require('jsverify');
+
+eval(fs.readFileSync('code.js')+'');
+
+
 
 // Helper class to track nodes
 // This class is in this file because I couldn't get it to run
@@ -27,59 +33,86 @@ class node {
     }
 }
 
+// Helper function to generate a new node to check
+function generateNode(size) {
+    return jsc.random(0, size-1)
+}
+
+// Helper function to generate a new graph
+function generateGraph(size) {
+    let graph = []
+
+    for (let i = 0; i < size; i++) {
+        let edges = []
+    
+        for (let j = 0; j < size; j++) {
+            edges.push(jsc.random(0, 1))
+        }
+    
+        graph.push(new node(i, edges))
+    }
+
+    return graph
+}
+
+// Helper function to check if path is valid
+function isValidPath(path, graph) {
+    for (let i = 0; i < path.length-1; i++) {
+        let node = path[i]
+        let edgesList = graph[node].getEdges()
+
+        // Check if edge to next node in the path exists
+        if (!edgesList[path[i+1]]) {
+            console.log("TEST FAILED: Given path is not valid...");
+            return false;
+        }
+    }
+
+    return true; // if it gets through the whole path, path is valid
+}
+
+
+
 
 
 // Custom Testing:
-const fs = require('fs');
-const jsc = require('jsverify');
+const graphSize = 250; // 250: Sufficiently large graph for testing
+const numOfTests = 1000000; // 1000000: Sufficiently enough tests to run
 
-eval(fs.readFileSync('code.js')+'');
-
-const graphSize = 250; // Sufficiently large graph for testing
-const numOfTests = 100000; // Sufficiently enough tests to run
-
-
-// Generates node with 
-const nodeGenerator = jsc.suchthat(jsc.nat(graphSize-1), n => n >= 0);
-const graphGenerator = jsc.bless({
-    generator: jsc.integer(graphSize).generator.map(size => {
-        return Array.from({ length: size }, (_, idx) => {
-            // Generate an array of 0s and 1s of length `size`
-            const edges = jsc.array(jsc.nat(1), size).generator;
-            return new node(idx, edges);
-          });
-    })
-});
-
-
-
-
-const test =
-    jsc.forall(graphGenerator, nodeGenerator, nodeGenerator, 
-                    (graph, startNodeIndex, targetNodeIndex) => {
-        if (startNodeIndex >= graph.length || targetNodeIndex >= graph.length) {
-            return true; // Invalid indices pass the test, these are out of bounds
-        }
+const startNodeIndex = generateNode(graphSize);
+const targetNodeIndex = generateNode(graphSize);
+const graphGenerator = generateGraph(graphSize);
         
-        const startNode = graph[startNodeIndex];
-        const targetNode = graph[targetNodeIndex];
+if (startNodeIndex >= graphGenerator.length || 
+    targetNodeIndex >= graphGenerator.length) {
+    return true; // Invalid indices pass the test, these are out of bounds
+}
+
+const startNode = graphGenerator[startNodeIndex];
+const targetNode = graphGenerator[targetNodeIndex];
+
+const result = depthFirstSearch(graphGenerator, startNode, targetNode);
 
 
-        const result = depthFirstSearch(graph, startNode, targetNode);
 
-        // 1. if startNode is targetNode, result is [startNode]
-        if (startNode == targetNode) {
-            return result.length === 1 && result[0] === startNode.getNode();
+// Loop to test multiple times
+for (let i = 0; i < numOfTests; i++) {
+    // if valid path exists, and target node was found, return true
+    if (result.length != 0) {
+        const checkValid = isValidPath(result, graphGenerator);
+        const checkTargetWasFound = result[result.length-1] === targetNode.getNode();
+        
+        if (checkValid && checkTargetWasFound) {
+            console.assert(checkValid && checkTargetWasFound, "Tests have failed...");
         }
-
-        // 2. if no path exists, result is []
-        const allEdges = graph.map(node => node.getEdges()).flat();
-        if (!allEdges.includes(1)) {
-            return result.length === 0;
+        else if (!checkValid) {
+            throw "The given path was not valid..."
         }
-
-        // 3. if valid path exists, last elem should be the targetNode
-        return result[result.length-1] === targetNode.getNode();
-    });
-
-jsc.assert(test, { tests: numOfTests });
+        else if (!checkTargetWasFound) {
+            throw "The target was not found..."
+        }
+        else {
+            throw "Some unknown error!!!"
+        }
+    }
+}
